@@ -24,8 +24,6 @@
 # [2, 1, 5, 3, 8, 6, 7, 9, 4]
 # [7, 9, 8, 4, 5, 2, 3, 6, 1]
 
-max_iterations = 1000 # prevent an infinite loop
-
 # read data and create main room for data
 input_data = list()
 for i in range(0,9):
@@ -39,11 +37,10 @@ for i in range(0,9):
         one_row.append(int(input_data[i][j]))
     data_room.append(one_row)
 
-flag_finish = 0
+flag_changed = 1
 n_iterations = 0
-while(flag_finish==0 and n_iterations<max_iterations):
-    n_iterations = n_iterations + 1
-    flag_finish = 1 # if still unfinish in this loop, this flag will be reset
+while(flag_changed==1):
+    flag_changed = 0 # if still unfinish in this loop, this flag will be reset
     # bulid the potential list
     potential_list = list()
     for i in range(0,9):
@@ -52,7 +49,6 @@ while(flag_finish==0 and n_iterations<max_iterations):
             if (data_room[i][j] != 0): # there is a number in this space
                 potential_list_onedata= list() # append an empty list
             else:
-                flag_finish = 0
                 # delete the impotential number
                 potential_list_onedata = list([1,2,3,4,5,6,7,8,9])
                 for num in range(1,10):
@@ -84,6 +80,7 @@ while(flag_finish==0 and n_iterations<max_iterations):
         for j in range(0,9):
             if(len(potential_list[i][j])==1): 
                 data_room[i][j] = potential_list[i][j][0]
+                flag_changed = 1
 
     for num in range(1,10):
         # in a row, one number can only appear in one space
@@ -96,6 +93,7 @@ while(flag_finish==0 and n_iterations<max_iterations):
                     fill_index_j = j
             if (counts_appear_in_potential == 1):
                 data_room[i][fill_index_j] = num
+                flag_changed = 1
 
         # in a column, one number can only appear in one space
         for j in range(0,9):
@@ -107,10 +105,10 @@ while(flag_finish==0 and n_iterations<max_iterations):
                     fill_index_i = i
             if (counts_appear_in_potential == 1):
                 data_room[fill_index_i][j] = num
+                flag_changed = 1
     
         # in a square, one number can only appear in one space, to do
 
 # output results
 for i in range(0,9):
     print(data_room[i])
-   
